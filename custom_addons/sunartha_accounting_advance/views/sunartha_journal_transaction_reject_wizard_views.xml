@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_sunartha_journal_transaction_reject_wizard_form" model="ir.ui.view">
+        <field name="name">sunartha.journal.transaction.reject.wizard.form</field>
+        <field name="model">sunartha.journal.transaction.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Tolak Transaksi">
+                <sheet>
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Konfirmasi Penolakan</strong><br/>
+                        Masukkan alasan penolakan. Pembuat transaksi akan menerima notifikasi.
+                    </div>
+                    <group>
+                        <field name="transaction_ids" widget="many2many_tags" readonly="1"
+                               string="Transaksi yang Ditolak"/>
+                        <field name="rejection_reason"
+                               placeholder="Tuliskan alasan penolakan secara jelas..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_reject" string="Konfirmasi Tolak"
+                            type="object" class="btn-danger"/>
+                    <button string="Batal" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

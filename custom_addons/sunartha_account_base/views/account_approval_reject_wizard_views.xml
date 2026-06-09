@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_approval_reject_wizard_form" model="ir.ui.view">
+        <field name="name">sunartha.account.approval.reject.wizard.form</field>
+        <field name="model">sunartha.account.approval.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Tolak Jurnal">
+                <sheet>
+                    <div class="alert alert-warning" role="alert">
+                        Jurnal yang ditolak akan kembali ke status Draft.
+                        Pengguna dapat memperbaiki dan mengajukan ulang.
+                    </div>
+                    <group>
+                        <field name="move_ids" widget="many2many_tags" readonly="1"
+                               invisible="not move_ids"/>
+                        <field name="reject_reason"
+                               placeholder="Masukkan alasan penolakan..."
+                               required="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_reject" string="Tolak Jurnal"
+                            type="object" class="btn-danger"/>
+                    <button string="Batal" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

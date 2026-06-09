@@ -1,0 +1,23 @@
+{
+    'name': 'Accounting Advance',
+    'version': '18.0.1.1.0',
+    'category': 'Accounting',
+    'summary': 'Journal Transactions dengan approval workflow, Branch, Ledger — CE compatible',
+    'author': 'Sunartha',
+    'website': 'https://sunartha.co.id',
+    'depends': ['account', 'mail', 'base'],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/sequence_data.xml',
+        'views/sunartha_branch_views.xml',
+        'views/sunartha_ledger_views.xml',
+        'views/sunartha_journal_transaction_views.xml',
+        'views/sunartha_journal_transaction_reject_wizard_views.xml',
+        'views/sunartha_report_statement_views.xml',
+        'views/menu.xml',
+    ],
+    'installable': True,
+    'application': True,
+    'license': 'LGPL-3',
+}

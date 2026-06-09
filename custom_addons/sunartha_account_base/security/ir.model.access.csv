@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_approval_request_user,sunartha.account.approval.request.user,model_sunartha_account_approval_request,sunartha_account_base.group_account_user,1,0,1,0
+access_approval_request_approver,sunartha.account.approval.request.approver,model_sunartha_account_approval_request,sunartha_account_base.group_account_approver,1,1,1,0
+access_approval_request_manager,sunartha.account.approval.request.manager,model_sunartha_account_approval_request,sunartha_account_base.group_account_manager,1,1,1,1
+access_coretax_export_user,sunartha.coretax.export.user,model_sunartha_coretax_export,sunartha_account_base.group_account_user,1,0,0,0
+access_coretax_export_manager,sunartha.coretax.export.manager,model_sunartha_coretax_export,sunartha_account_base.group_account_manager,1,1,1,1
+access_report_psak_user,sunartha.report.psak.user,model_sunartha_report_psak,sunartha_account_base.group_account_user,1,1,1,1
+access_reject_wizard_user,sunartha.account.approval.reject.wizard.user,model_sunartha_account_approval_reject_wizard,sunartha_account_base.group_account_approver,1,1,1,1

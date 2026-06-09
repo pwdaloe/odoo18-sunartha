@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== FORM VIEW ===== -->
+    <record id="view_account_approval_request_form" model="ir.ui.view">
+        <field name="name">sunartha.account.approval.request.form</field>
+        <field name="model">sunartha.account.approval.request</field>
+        <field name="arch" type="xml">
+            <form string="Permintaan Approval Jurnal">
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pending,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Informasi Jurnal">
+                            <field name="move_id" readonly="1"/>
+                            <field name="move_name" readonly="1"/>
+                            <field name="move_date" readonly="1"/>
+                            <field name="journal_id" readonly="1"/>
+                            <field name="move_amount" readonly="1" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group string="Proses Approval">
+                            <field name="requester_id" readonly="1"/>
+                            <field name="date_requested" readonly="1"/>
+                            <field name="approver_id" readonly="1"/>
+                            <field name="date_responded" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Catatan / Alasan Tolak" invisible="not notes">
+                        <field name="notes" nolabel="1" readonly="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== LIST VIEW ===== -->
+    <record id="view_account_approval_request_list" model="ir.ui.view">
+        <field name="name">sunartha.account.approval.request.list</field>
+        <field name="model">sunartha.account.approval.request</field>
+        <field name="arch" type="xml">
+            <list string="Permintaan Approval" default_order="date_requested desc"
+                  decoration-warning="state == 'pending'"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'rejected'">
+                <field name="name"/>
+                <field name="move_id"/>
+                <field name="journal_id"/>
+                <field name="move_date"/>
+                <field name="move_amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="requester_id"/>
+                <field name="date_requested"/>
+                <field name="approver_id"/>
+                <field name="date_responded"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'pending'"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===== SEARCH VIEW ===== -->
+    <record id="view_account_approval_request_search" model="ir.ui.view">
+        <field name="name">sunartha.account.approval.request.search</field>
+        <field name="model">sunartha.account.approval.request</field>
+        <field name="arch" type="xml">
+            <search string="Cari Permintaan Approval">
+                <field name="name"/>
+                <field name="move_id"/>
+                <field name="requester_id"/>
+                <field name="approver_id"/>
+                <separator/>
+                <filter string="Menunggu" name="filter_pending"
+                        domain="[('state','=','pending')]"/>
+                <filter string="Disetujui" name="filter_approved"
+                        domain="[('state','=','approved')]"/>
+                <filter string="Ditolak" name="filter_rejected"
+                        domain="[('state','=','rejected')]"/>
+                <group expand="0" string="Kelompokkan">
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Journal" name="group_journal" context="{'group_by': 'journal_id'}"/>
+                    <filter string="Diajukan Oleh" name="group_requester" context="{'group_by': 'requester_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ===== ACTION ===== -->
+    <record id="action_account_approval_request" model="ir.actions.act_window">
+        <field name="name">Permintaan Approval Jurnal</field>
+        <field name="res_model">sunartha.account.approval.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_filter_pending': 1}</field>
+    </record>
+
+</odoo>

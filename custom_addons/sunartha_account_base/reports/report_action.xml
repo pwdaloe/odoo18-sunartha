@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_posisi_keuangan" model="ir.actions.report">
+        <field name="name">Laporan Posisi Keuangan (Neraca)</field>
+        <field name="model">sunartha.report.psak</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sunartha_account_base.report_posisi_keuangan</field>
+        <field name="print_report_name">'Laporan Posisi Keuangan - ' + object.company_id.name</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <record id="action_report_laba_rugi" model="ir.actions.report">
+        <field name="name">Laporan Laba Rugi Komprehensif</field>
+        <field name="model">sunartha.report.psak</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sunartha_account_base.report_laba_rugi</field>
+        <field name="print_report_name">'Laporan Laba Rugi - ' + object.company_id.name</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <record id="action_report_arus_kas" model="ir.actions.report">
+        <field name="name">Laporan Arus Kas</field>
+        <field name="model">sunartha.report.psak</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">sunartha_account_base.report_arus_kas</field>
+        <field name="print_report_name">'Laporan Arus Kas - ' + object.company_id.name</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+</odoo>

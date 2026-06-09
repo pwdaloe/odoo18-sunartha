@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== TOP-LEVEL APP ===== -->
+    <menuitem id="menu_accounting_advance_root"
+              name="Accounting Advance"
+              web_icon="sunartha_accounting_advance,static/description/icon.png"
+              sequence="52"/>
+
+    <!-- ===== DASHBOARD — tanpa groups agar app selalu terlihat ===== -->
+    <menuitem id="menu_accounting_advance_dashboard"
+              name="Dashboard"
+              parent="menu_accounting_advance_root"
+              action="action_sunartha_journal_transaction"
+              sequence="10"/>
+
+    <!-- ===== JOURNAL TRANSACTIONS ===== -->
+    <menuitem id="menu_accounting_advance_trx"
+              name="Journal Transactions"
+              parent="menu_accounting_advance_root"
+              sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
+    <menuitem id="menu_accounting_advance_trx_all"
+              name="Semua Transaksi"
+              parent="menu_accounting_advance_trx"
+              action="action_sunartha_journal_transaction"
+              sequence="10"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
+    <menuitem id="menu_accounting_advance_trx_pending"
+              name="Menunggu Persetujuan"
+              parent="menu_accounting_advance_trx"
+              action="action_sunartha_journal_transaction_pending"
+              sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <!-- ===== REPORTING ===== -->
+    <menuitem id="menu_accounting_advance_reporting"
+              name="Reporting"
+              parent="menu_accounting_advance_root"
+              sequence="80"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
+    <menuitem id="menu_accounting_advance_statement_reports"
+              name="Statement Reports"
+              parent="menu_accounting_advance_reporting"
+              sequence="10"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
+    <menuitem id="menu_accounting_advance_balance_sheet"
+              name="Balance Sheet"
+              parent="menu_accounting_advance_statement_reports"
+              action="sunartha_accounting_advance.action_report_balance_sheet"
+              sequence="10"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
+    <menuitem id="menu_accounting_advance_profit_loss"
+              name="Profit and Loss"
+              parent="menu_accounting_advance_statement_reports"
+              action="sunartha_accounting_advance.action_report_profit_loss"
+              sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
+    <menuitem id="menu_accounting_advance_cash_flow"
+              name="Cash Flow Statement"
+              parent="menu_accounting_advance_statement_reports"
+              action="sunartha_accounting_advance.action_report_cash_flow"
+              sequence="30"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
+    <!-- ===== CONFIGURATION ===== -->
+    <menuitem id="menu_accounting_advance_config"
+              name="Configuration"
+              parent="menu_accounting_advance_root"
+              sequence="90"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <!-- Sub-grup: Master Data -->
+    <menuitem id="menu_accounting_advance_masterdata"
+              name="Master Data"
+              parent="menu_accounting_advance_config"
+              sequence="10"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <menuitem id="menu_accounting_advance_branch"
+              name="Branch"
+              parent="menu_accounting_advance_masterdata"
+              action="action_sunartha_branch"
+              sequence="10"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <menuitem id="menu_accounting_advance_ledger"
+              name="Ledger"
+              parent="menu_accounting_advance_masterdata"
+              action="action_sunartha_ledger"
+              sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <!-- Sub-grup: Accounting -->
+    <menuitem id="menu_accounting_advance_accounting"
+              name="Accounting"
+              parent="menu_accounting_advance_config"
+              sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <menuitem id="menu_accounting_advance_coa"
+              name="Chart of Accounts"
+              parent="menu_accounting_advance_accounting"
+              action="account.action_account_form"
+              sequence="10"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <menuitem id="menu_accounting_advance_taxes"
+              name="Taxes"
+              parent="menu_accounting_advance_accounting"
+              action="account.action_tax_form"
+              sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <menuitem id="menu_accounting_advance_journals"
+              name="Journals"
+              parent="menu_accounting_advance_accounting"
+              action="account.action_account_journal_form"
+              sequence="30"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <menuitem id="menu_accounting_advance_currencies"
+              name="Currencies"
+              parent="menu_accounting_advance_accounting"
+              action="base.action_currency_form"
+              sequence="40"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+</odoo>

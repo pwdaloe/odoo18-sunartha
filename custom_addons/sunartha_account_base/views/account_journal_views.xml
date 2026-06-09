@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_journal_form_inherit_approval" model="ir.ui.view">
+        <field name="name">account.journal.form.inherit.sunartha.approval</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='advanced_settings']" position="after">
+                <page string="Konfigurasi Approval" name="page_approval_config"
+                      groups="sunartha_account_base.group_account_manager">
+                    <group>
+                        <group string="Aturan Approval Jurnal">
+                            <field name="x_approval_threshold"
+                                   widget="monetary"
+                                   help="Jurnal dengan total ≥ nilai ini memerlukan persetujuan. Isi 0 untuk nonaktifkan."/>
+                            <field name="x_approver_group_id"
+                                   help="Group pengguna yang berhak menyetujui jurnal di journal ini."/>
+                        </group>
+                        <group string="Info">
+                            <div class="alert alert-info" role="alert" colspan="2">
+                                <p>
+                                    Jika <b>Threshold Approval</b> diisi, setiap jurnal dengan total
+                                    melebihi nilai tersebut harus disetujui oleh anggota
+                                    <b>Group Approver</b> sebelum bisa diposting.
+                                </p>
+                                <p>Isi 0 untuk menonaktifkan approval pada journal ini.</p>
+                            </div>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

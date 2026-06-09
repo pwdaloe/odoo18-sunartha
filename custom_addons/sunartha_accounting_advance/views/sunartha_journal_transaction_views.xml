@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         FORM VIEW — Invoice-style layout
+    ============================================================ -->
+    <record id="view_sunartha_journal_transaction_form" model="ir.ui.view">
+        <field name="name">sunartha.journal.transaction.form</field>
+        <field name="model">sunartha.journal.transaction</field>
+        <field name="arch" type="xml">
+            <form string="Journal Transactions">
+                <header>
+                    <button name="action_submit" string="Submit" type="object"
+                            class="btn-warning"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="btn-success"
+                            groups="sunartha_accounting_advance.group_accounting_advance_manager"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            class="btn-danger"
+                            groups="sunartha_accounting_advance.group_accounting_advance_manager"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_post" string="Post" type="object"
+                            class="btn-primary"
+                            groups="sunartha_accounting_advance.group_accounting_advance_manager"
+                            invisible="state != 'approved'"/>
+                    <button name="action_reset_draft" string="Reset ke Draft" type="object"
+                            invisible="state != 'submitted' and state != 'rejected'"/>
+                    <button name="action_cancel" string="Batalkan" type="object"
+                            groups="sunartha_accounting_advance.group_accounting_advance_manager"
+                            invisible="state != 'draft' and state != 'submitted' and state != 'rejected'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,posted"/>
+                </header>
+                <sheet>
+
+                    <!-- Smart Buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_reversal" type="object"
+                                class="oe_stat_button" icon="fa-refresh"
+                                invisible="not reversal_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Reversal</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Title + Module Badge -->
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <field name="module" widget="badge"
+                               decoration-info="module == 'gl'"
+                               decoration-warning="module == 'ar'"
+                               decoration-success="module == 'ap'"
+                               decoration-primary="module == 'in'"
+                               readonly="state != 'draft'"/>
+                    </div>
+
+                    <!-- 2-column Header: Informasi | Referensi -->
+                    <group>
+                        <group string="Informasi Transaksi">
+                            <field name="transaction_date"
+                                   readonly="state != 'draft'"/>
+                            <field name="post_period" readonly="1"/>
+                            <field name="batch_number" readonly="1"/>
+                            <field name="type"
+                                   readonly="state != 'draft'"/>
+                            <field name="auto_reversing"
+                                   readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Referensi">
+                            <field name="branch_id"
+                                   readonly="state != 'draft'"/>
+                            <field name="ledger_id"
+                                   readonly="state != 'draft'"/>
+                            <field name="currency_id"
+                                   readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="currency_rate"
+                                   readonly="state != 'draft'"
+                                   invisible="not currency_id"
+                                   digits="[16,4]"/>
+                            <field name="company_id"
+                                   groups="base.group_multi_company" readonly="1"/>
+                            <field name="user_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Description -->
+                    <group string="Description">
+                        <field name="description" nolabel="1"
+                               placeholder="Keterangan transaksi..."
+                               readonly="state != 'draft'"/>
+                    </group>
+
+                    <!-- Rejection Alert -->
+                    <div class="alert alert-danger mb-0" role="alert"
+                         invisible="not rejection_reason">
+                        <span class="fw-bold">Ditolak: </span>
+                        <field name="rejection_reason" nolabel="1" readonly="1"
+                               class="d-inline"/>
+                    </div>
+
+                    <notebook>
+                        <!-- ===== TAB DETAILS ===== -->
+                        <page string="Details" name="details">
+                            <field name="line_ids"
+                                   readonly="state != 'draft'">
+                                <list editable="bottom"
+                                      decoration-muted="debit_amount == 0 and credit_amount == 0">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="account_id" required="1"
+                                           options="{'no_create': True}"/>
+                                    <field name="description"/>
+                                    <field name="subaccount"/>
+                                    <field name="transaction_date"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="debit_amount" sum="Debit Total"/>
+                                    <field name="credit_amount" sum="Credit Total"/>
+                                    <field name="transaction_description" optional="show"/>
+                                    <field name="branch_id" optional="show"/>
+                                </list>
+                            </field>
+
+                            <!-- Totals: far right, mirip Invoice -->
+                            <div class="clearfix mt-2">
+                                <group class="oe_subtotal_footer oe_right col-6 offset-6">
+                                    <field name="debit_total" readonly="1"
+                                           string="Debit Total"/>
+                                    <field name="credit_total" readonly="1"
+                                           string="Credit Total"/>
+                                    <field name="is_balanced" readonly="1"
+                                           widget="boolean" string="Balanced"/>
+                                </group>
+                            </div>
+                        </page>
+
+                        <!-- ===== TAB OTHER INFO ===== -->
+                        <page string="Other Info" name="other_info">
+                            <group>
+                                <group string="Persetujuan">
+                                    <field name="approver_id" readonly="1"/>
+                                    <field name="approval_date" readonly="1"/>
+                                </group>
+                                <group string="Reversal">
+                                    <field name="reversal_id" readonly="1"
+                                           invisible="not reversal_id"/>
+                                    <field name="reversed_entry_id" readonly="1"
+                                           invisible="not reversed_entry_id"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         LIST VIEW
+    ============================================================ -->
+    <record id="view_sunartha_journal_transaction_list" model="ir.ui.view">
+        <field name="name">sunartha.journal.transaction.list</field>
+        <field name="model">sunartha.journal.transaction</field>
+        <field name="arch" type="xml">
+            <list string="Journal Transactions"
+                  decoration-muted="state == 'posted'"
+                  decoration-warning="state == 'submitted'"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'rejected'"
+                  decoration-info="state == 'cancelled'">
+                <field name="name"/>
+                <field name="module" widget="badge"
+                       decoration-info="module == 'gl'"
+                       decoration-warning="module == 'ar'"
+                       decoration-success="module == 'ap'"
+                       decoration-primary="module == 'in'"/>
+                <field name="transaction_date"/>
+                <field name="post_period" optional="show"/>
+                <field name="branch_id" optional="show"/>
+                <field name="ledger_id" optional="hide"/>
+                <field name="description" optional="show"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="debit_total"/>
+                <field name="credit_total"/>
+                <field name="is_balanced" optional="hide"/>
+                <field name="user_id" optional="hide"/>
+                <field name="approver_id" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-muted="state == 'draft'"
+                       decoration-warning="state == 'submitted'"
+                       decoration-success="state == 'approved'"
+                       decoration-info="state == 'posted'"
+                       decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         SEARCH VIEW
+    ============================================================ -->
+    <record id="view_sunartha_journal_transaction_search" model="ir.ui.view">
+        <field name="name">sunartha.journal.transaction.search</field>
+        <field name="model">sunartha.journal.transaction</field>
+        <field name="arch" type="xml">
+            <search string="Cari Journal Transaction">
+                <field name="name" string="Referensi / Batch"/>
+                <field name="description" string="Description"/>
+                <field name="branch_id"/>
+                <field name="ledger_id"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter name="f_draft" string="Draft" domain="[('state','=','draft')]"/>
+                <filter name="f_submitted" string="Diajukan" domain="[('state','=','submitted')]"/>
+                <filter name="f_approved" string="Disetujui" domain="[('state','=','approved')]"/>
+                <filter name="f_posted" string="Posted" domain="[('state','=','posted')]"/>
+                <filter name="f_rejected" string="Ditolak" domain="[('state','=','rejected')]"/>
+                <separator/>
+                <filter name="f_mine" string="Transaksi Saya" domain="[('user_id','=',uid)]"/>
+                <filter name="f_ar" string="AR" domain="[('module','=','ar')]"/>
+                <filter name="f_ap" string="AP" domain="[('module','=','ap')]"/>
+                <filter name="f_gl" string="GL" domain="[('module','=','gl')]"/>
+                <filter name="f_in" string="IN" domain="[('module','=','in')]"/>
+                <group expand="0" string="Kelompokkan">
+                    <filter name="g_state" string="Status" context="{'group_by':'state'}"/>
+                    <filter name="g_module" string="Module" context="{'group_by':'module'}"/>
+                    <filter name="g_branch" string="Branch" context="{'group_by':'branch_id'}"/>
+                    <filter name="g_period" string="Periode" context="{'group_by':'post_period'}"/>
+                    <filter name="g_date" string="Tanggal" context="{'group_by':'transaction_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ============================================================
+         ACTIONS
+    ============================================================ -->
+    <record id="action_sunartha_journal_transaction" model="ir.actions.act_window">
+        <field name="name">Journal Transactions</field>
+        <field name="res_model">sunartha.journal.transaction</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Buat journal transaction pertama Anda
+            </p>
+        </field>
+    </record>
+
+    <record id="action_sunartha_journal_transaction_pending" model="ir.actions.act_window">
+        <field name="name">Menunggu Persetujuan</field>
+        <field name="res_model">sunartha.journal.transaction</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'submitted')]</field>
+    </record>
+
+</odoo>

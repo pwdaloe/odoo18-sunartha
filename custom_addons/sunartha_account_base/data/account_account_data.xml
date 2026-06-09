@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ==================== ASET (1xxx) ==================== -->
+        <record id="account_1150_ppn_masukan" model="account.account">
+            <field name="code">1150</field>
+            <field name="name">PPN Masukan Belum Dikreditkan</field>
+            <field name="account_type">asset_current</field>
+        </record>
+        <record id="account_1151_pph22_dibayar" model="account.account">
+            <field name="code">1151</field>
+            <field name="name">PPh Dibayar Dimuka Pasal 22</field>
+            <field name="account_type">asset_current</field>
+        </record>
+        <record id="account_1152_pph23_dibayar" model="account.account">
+            <field name="code">1152</field>
+            <field name="name">PPh Dibayar Dimuka Pasal 23</field>
+            <field name="account_type">asset_current</field>
+        </record>
+        <record id="account_1160_pajak_tangguhan_aset" model="account.account">
+            <field name="code">1160</field>
+            <field name="name">Aset Pajak Tangguhan (PSAK 46)</field>
+            <field name="account_type">asset_non_current</field>
+        </record>
+        <record id="account_1700_aset_hak_guna" model="account.account">
+            <field name="code">1700</field>
+            <field name="name">Aset Hak-Guna (PSAK 73)</field>
+            <field name="account_type">asset_fixed</field>
+        </record>
+        <record id="account_1800_goodwill" model="account.account">
+            <field name="code">1800</field>
+            <field name="name">Goodwill (PSAK 22 — Konsolidasi)</field>
+            <field name="account_type">asset_non_current</field>
+        </record>
+
+        <!-- ==================== LIABILITAS (2xxx) ==================== -->
+        <record id="account_2150_hutang_ppn" model="account.account">
+            <field name="code">2150</field>
+            <field name="name">Hutang PPN Keluaran</field>
+            <field name="account_type">liability_current</field>
+        </record>
+        <record id="account_2151_hutang_pph23" model="account.account">
+            <field name="code">2151</field>
+            <field name="name">Hutang PPh Pasal 23</field>
+            <field name="account_type">liability_current</field>
+        </record>
+        <record id="account_2152_hutang_pph4_2" model="account.account">
+            <field name="code">2152</field>
+            <field name="name">Hutang PPh Pasal 4 Ayat (2)</field>
+            <field name="account_type">liability_current</field>
+        </record>
+        <record id="account_2153_hutang_pph26" model="account.account">
+            <field name="code">2153</field>
+            <field name="name">Hutang PPh Pasal 26</field>
+            <field name="account_type">liability_current</field>
+        </record>
+        <record id="account_2154_hutang_pph22" model="account.account">
+            <field name="code">2154</field>
+            <field name="name">Hutang PPh Pasal 22</field>
+            <field name="account_type">liability_current</field>
+        </record>
+        <record id="account_2160_pajak_tangguhan_liab" model="account.account">
+            <field name="code">2160</field>
+            <field name="name">Liabilitas Pajak Tangguhan (PSAK 46)</field>
+            <field name="account_type">liability_non_current</field>
+        </record>
+        <record id="account_2700_liabilitas_sewa" model="account.account">
+            <field name="code">2700</field>
+            <field name="name">Liabilitas Sewa (PSAK 73)</field>
+            <field name="account_type">liability_non_current</field>
+        </record>
+
+        <!-- ==================== EKUITAS (3xxx) ==================== -->
+        <record id="account_3500_oci" model="account.account">
+            <field name="code">3500</field>
+            <field name="name">Penghasilan Komprehensif Lain / OCI (PSAK 1)</field>
+            <field name="account_type">equity</field>
+        </record>
+        <record id="account_3600_nci" model="account.account">
+            <field name="code">3600</field>
+            <field name="name">Kepentingan Non-Pengendali / NCI (PSAK 65)</field>
+            <field name="account_type">equity</field>
+        </record>
+
+        <!-- ==================== PENDAPATAN (4xxx) ==================== -->
+        <record id="account_4100_pendapatan_pelayaran" model="account.account">
+            <field name="code">4100</field>
+            <field name="name">Pendapatan Usaha Pelayaran</field>
+            <field name="account_type">income</field>
+        </record>
+        <record id="account_4200_pendapatan_logistik" model="account.account">
+            <field name="code">4200</field>
+            <field name="name">Pendapatan Jasa Logistik &amp; Penyimpanan</field>
+            <field name="account_type">income</field>
+        </record>
+        <record id="account_4900_pendapatan_lain" model="account.account">
+            <field name="code">4900</field>
+            <field name="name">Pendapatan Lain-lain</field>
+            <field name="account_type">income_other</field>
+        </record>
+
+        <!-- ==================== BEBAN POKOK (5xxx) ==================== -->
+        <record id="account_5100_bpok_pelayaran" model="account.account">
+            <field name="code">5100</field>
+            <field name="name">Beban Pokok Pelayaran</field>
+            <field name="account_type">expense_direct_cost</field>
+        </record>
+        <record id="account_5200_bpok_logistik" model="account.account">
+            <field name="code">5200</field>
+            <field name="name">Beban Pokok Logistik</field>
+            <field name="account_type">expense_direct_cost</field>
+        </record>
+
+        <!-- ==================== BEBAN OPERASIONAL (6xxx) ==================== -->
+        <record id="account_6100_beban_adm" model="account.account">
+            <field name="code">6100</field>
+            <field name="name">Beban Administrasi &amp; Umum</field>
+            <field name="account_type">expense</field>
+        </record>
+        <record id="account_6200_beban_keuangan" model="account.account">
+            <field name="code">6200</field>
+            <field name="name">Beban Keuangan (Bunga &amp; Bank)</field>
+            <field name="account_type">expense</field>
+        </record>
+        <record id="account_6300_beban_pph_badan" model="account.account">
+            <field name="code">6300</field>
+            <field name="name">Beban Pajak Penghasilan (PPh Badan)</field>
+            <field name="account_type">expense</field>
+        </record>
+
+    </data>
+</odoo>

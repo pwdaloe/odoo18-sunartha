@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_arus_kas">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="wizard">
+            <t t-set="data" t-value="wizard._get_cashflow_data()"/>
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .report-header { text-align: center; margin-bottom: 20px; }
+                        .report-title { font-size: 14pt; font-weight: bold; }
+                        .psak-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+                        .psak-table th { background-color: #2c3e50; color: white; padding: 6px 8px; text-align: left; }
+                        .psak-table td { padding: 4px 8px; border-bottom: 1px solid #ecf0f1; }
+                        .section-header { background-color: #8e44ad; color: white; font-weight: bold; }
+                        .total-row { background-color: #ecf0f1; font-weight: bold; }
+                        .grand-total { background-color: #2c3e50; color: white; font-weight: bold; }
+                        .positif { color: #27ae60; }
+                        .negatif { color: #e74c3c; }
+                        .amount { text-align: right; }
+                        .indent { padding-left: 20px !important; }
+                    </style>
+
+                    <div class="report-header">
+                        <div class="report-title"><t t-esc="wizard.company_id.name"/></div>
+                        <div style="font-size:11pt;">LAPORAN ARUS KAS</div>
+                        <div style="font-size:11pt;">
+                            Periode <t t-esc="wizard.date_from.strftime('%d %B %Y')"/> s/d
+                            <t t-esc="wizard.date_to.strftime('%d %B %Y')"/>
+                        </div>
+                        <small>(Metode Tidak Langsung — PSAK 2)</small>
+                    </div>
+
+                    <table class="psak-table">
+                        <thead>
+                            <tr>
+                                <th style="width:70%">Keterangan</th>
+                                <th style="width:30%; text-align:right">Jumlah (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <!-- AKTIVITAS OPERASI -->
+                            <tr class="section-header">
+                                <td colspan="2">I. ARUS KAS DARI AKTIVITAS OPERASI</td>
+                            </tr>
+                            <tr>
+                                <td class="indent">Laba (Rugi) Bersih Periode Berjalan</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['laba_bersih'])"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding-left:20px; color:#7f8c8d;">
+                                    <i>Penyesuaian untuk rekonsiliasi laba bersih:</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="indent">Penyusutan Aset Tetap</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['penyusutan'])"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="padding-left:20px; color:#7f8c8d;">
+                                    <i>Perubahan Modal Kerja:</i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="indent">Penurunan (Kenaikan) Piutang Usaha</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['delta_piutang'])"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="indent">Penurunan (Kenaikan) Aset Lancar Lainnya</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['delta_persediaan'])"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="indent">Kenaikan (Penurunan) Hutang Usaha</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['delta_hutang_usaha'])"/>
+                                </td>
+                            </tr>
+                            <tr class="total-row">
+                                <td>Arus Kas Bersih dari Aktivitas Operasi</td>
+                                <td class="amount">
+                                    <t t-attf-class="{'positif' if data['kas_operasi'] >= 0 else 'negatif'}">
+                                        <t t-esc="'{:,.0f}'.format(data['kas_operasi'])"/>
+                                    </t>
+                                </td>
+                            </tr>
+
+                            <!-- AKTIVITAS INVESTASI -->
+                            <tr class="section-header">
+                                <td colspan="2">II. ARUS KAS DARI AKTIVITAS INVESTASI</td>
+                            </tr>
+                            <tr>
+                                <td class="indent">Perolehan / Pelepasan Aset Tetap (neto)</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['kas_investasi'])"/>
+                                </td>
+                            </tr>
+                            <tr class="total-row">
+                                <td>Arus Kas Bersih dari Aktivitas Investasi</td>
+                                <td class="amount">
+                                    <t t-attf-class="{'positif' if data['kas_investasi'] >= 0 else 'negatif'}">
+                                        <t t-esc="'{:,.0f}'.format(data['kas_investasi'])"/>
+                                    </t>
+                                </td>
+                            </tr>
+
+                            <!-- AKTIVITAS PENDANAAN -->
+                            <tr class="section-header">
+                                <td colspan="2">III. ARUS KAS DARI AKTIVITAS PENDANAAN</td>
+                            </tr>
+                            <tr>
+                                <td class="indent">
+                                    <i>Penerimaan / Pembayaran Pinjaman, Dividen, dll.</i>
+                                    <br/>
+                                    <small style="color:#e74c3c;">
+                                        * Konfigurasi akun pendanaan diperlukan untuk data aktual
+                                    </small>
+                                </td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['kas_pendanaan'])"/>
+                                </td>
+                            </tr>
+                            <tr class="total-row">
+                                <td>Arus Kas Bersih dari Aktivitas Pendanaan</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['kas_pendanaan'])"/>
+                                </td>
+                            </tr>
+
+                            <!-- KENAIKAN/PENURUNAN BERSIH KAS -->
+                            <tr class="grand-total">
+                                <td>KENAIKAN (PENURUNAN) BERSIH KAS DAN SETARA KAS</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['kenaikan_penurunan_kas'])"/>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top:20px; font-size:8pt; color:#7f8c8d;">
+                        Dicetak pada: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                        | Metode Tidak Langsung — PSAK 2: Laporan Arus Kas
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

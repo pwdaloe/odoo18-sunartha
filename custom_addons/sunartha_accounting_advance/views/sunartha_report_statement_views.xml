@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== FORM VIEW ===== -->
+    <record id="view_report_statement_form" model="ir.ui.view">
+        <field name="name">sunartha.report.statement.form</field>
+        <field name="model">sunartha.report.statement</field>
+        <field name="arch" type="xml">
+            <form string="Financial Statement">
+                <header>
+                    <button name="action_generate" string="Generate Report"
+                            type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="title" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Periode">
+                            <field name="date_from"
+                                   invisible="report_type == 'balance_sheet'"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group string="Filter">
+                            <field name="branch_id"/>
+                            <field name="ledger_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="report_type" invisible="1"/>
+                    <separator string="Report Lines"/>
+                    <field name="line_ids" readonly="1" nolabel="1">
+                        <list decoration-info="is_section == True"
+                              decoration-warning="is_total == True">
+                            <field name="sequence" column_invisible="1"/>
+                            <field name="section" string="Section / Description"/>
+                            <field name="account_code" string="Code"/>
+                            <field name="account_name" string="Account"/>
+                            <field name="debit" string="Debit"/>
+                            <field name="credit" string="Credit"/>
+                            <field name="balance" string="Balance"/>
+                            <field name="is_section" column_invisible="1"/>
+                            <field name="is_total" column_invisible="1"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== ACTIONS ===== -->
+    <record id="action_report_balance_sheet" model="ir.actions.act_window">
+        <field name="name">Balance Sheet</field>
+        <field name="res_model">sunartha.report.statement</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'default_report_type': 'balance_sheet'}</field>
+    </record>
+
+    <record id="action_report_profit_loss" model="ir.actions.act_window">
+        <field name="name">Profit and Loss</field>
+        <field name="res_model">sunartha.report.statement</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'default_report_type': 'profit_loss'}</field>
+    </record>
+
+    <record id="action_report_cash_flow" model="ir.actions.act_window">
+        <field name="name">Cash Flow Statement</field>
+        <field name="res_model">sunartha.report.statement</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'default_report_type': 'cash_flow'}</field>
+    </record>
+
+</odoo>

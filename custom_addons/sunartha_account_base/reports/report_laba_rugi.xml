@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_laba_rugi">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="wizard">
+            <t t-set="data" t-value="wizard._get_pl_data()"/>
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .report-header { text-align: center; margin-bottom: 20px; }
+                        .report-title { font-size: 14pt; font-weight: bold; }
+                        .psak-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+                        .psak-table th { background-color: #2c3e50; color: white; padding: 6px 8px; text-align: left; }
+                        .psak-table td { padding: 4px 8px; border-bottom: 1px solid #ecf0f1; }
+                        .section-header { background-color: #27ae60; color: white; font-weight: bold; }
+                        .subsection-header { background-color: #bdc3c7; font-weight: bold; }
+                        .total-row { background-color: #ecf0f1; font-weight: bold; }
+                        .grand-total { background-color: #2c3e50; color: white; font-weight: bold; }
+                        .laba-row { background-color: #27ae60; color: white; font-weight: bold; }
+                        .rugi-row { background-color: #e74c3c; color: white; font-weight: bold; }
+                        .amount { text-align: right; }
+                        .indent { padding-left: 20px !important; }
+                    </style>
+
+                    <div class="report-header">
+                        <div class="report-title"><t t-esc="wizard.company_id.name"/></div>
+                        <div style="font-size:11pt;">LAPORAN LABA RUGI KOMPREHENSIF</div>
+                        <div style="font-size:11pt;">
+                            Periode <t t-esc="wizard.date_from.strftime('%d %B %Y')"/> s/d
+                            <t t-esc="wizard.date_to.strftime('%d %B %Y')"/>
+                        </div>
+                        <small>(Disajikan dalam Rupiah — PSAK 1 &amp; PSAK 72)</small>
+                    </div>
+
+                    <table class="psak-table">
+                        <thead>
+                            <tr>
+                                <th style="width:60%">Keterangan</th>
+                                <th style="width:40%; text-align:right">Jumlah (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <!-- PENDAPATAN -->
+                            <tr class="section-header">
+                                <td colspan="2">PENDAPATAN USAHA</td>
+                            </tr>
+                            <t t-foreach="data['pendapatan']" t-as="line">
+                                <tr>
+                                    <td class="indent">
+                                        <t t-esc="line['code']"/> - <t t-esc="line['name']"/>
+                                    </td>
+                                    <td class="amount">
+                                        <t t-esc="'{:,.0f}'.format(line['balance'])"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr class="total-row">
+                                <td>Jumlah Pendapatan Usaha</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['total_pendapatan'])"/>
+                                </td>
+                            </tr>
+
+                            <!-- BEBAN POKOK -->
+                            <tr class="section-header">
+                                <td colspan="2">BEBAN POKOK PENDAPATAN</td>
+                            </tr>
+                            <t t-foreach="data['beban_pokok']" t-as="line">
+                                <tr>
+                                    <td class="indent">
+                                        <t t-esc="line['code']"/> - <t t-esc="line['name']"/>
+                                    </td>
+                                    <td class="amount">
+                                        (<t t-esc="'{:,.0f}'.format(line['balance'])"/>)
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr class="total-row">
+                                <td>Jumlah Beban Pokok</td>
+                                <td class="amount">
+                                    (<t t-esc="'{:,.0f}'.format(data['total_beban_pokok'])"/>)
+                                </td>
+                            </tr>
+
+                            <!-- LABA KOTOR -->
+                            <tr t-attf-class="{'laba-row' if data['laba_kotor'] >= 0 else 'rugi-row'}">
+                                <td>LABA KOTOR</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['laba_kotor'])"/>
+                                </td>
+                            </tr>
+
+                            <!-- BEBAN OPERASIONAL -->
+                            <tr class="section-header">
+                                <td colspan="2">BEBAN OPERASIONAL</td>
+                            </tr>
+                            <t t-foreach="data['beban_operasional']" t-as="line">
+                                <tr>
+                                    <td class="indent">
+                                        <t t-esc="line['code']"/> - <t t-esc="line['name']"/>
+                                    </td>
+                                    <td class="amount">
+                                        (<t t-esc="'{:,.0f}'.format(line['balance'])"/>)
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-foreach="data['beban_penyusutan']" t-as="line">
+                                <tr>
+                                    <td class="indent">
+                                        <t t-esc="line['code']"/> - <t t-esc="line['name']"/>
+                                        <small> (Penyusutan)</small>
+                                    </td>
+                                    <td class="amount">
+                                        (<t t-esc="'{:,.0f}'.format(line['balance'])"/>)
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr class="total-row">
+                                <td>Jumlah Beban Operasional</td>
+                                <td class="amount">
+                                    (<t t-esc="'{:,.0f}'.format(data['total_beban_operasional'] + data['total_beban_penyusutan'])"/>)
+                                </td>
+                            </tr>
+
+                            <!-- LABA OPERASIONAL -->
+                            <tr t-attf-class="{'laba-row' if data['laba_operasional'] >= 0 else 'rugi-row'}">
+                                <td>LABA (RUGI) OPERASIONAL</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['laba_operasional'])"/>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top:20px; font-size:8pt; color:#7f8c8d;">
+                        Dicetak pada: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                        | Sesuai PSAK 1 &amp; PSAK 72
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_posisi_keuangan">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="wizard">
+            <t t-set="data" t-value="wizard._get_balance_sheet_data()"/>
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .report-header { text-align: center; margin-bottom: 20px; }
+                        .report-title { font-size: 14pt; font-weight: bold; }
+                        .report-subtitle { font-size: 11pt; }
+                        .psak-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+                        .psak-table th { background-color: #2c3e50; color: white; padding: 6px 8px; text-align: left; }
+                        .psak-table td { padding: 4px 8px; border-bottom: 1px solid #ecf0f1; }
+                        .section-header { background-color: #3498db; color: white; font-weight: bold; }
+                        .subsection-header { background-color: #bdc3c7; font-weight: bold; }
+                        .total-row { background-color: #ecf0f1; font-weight: bold; }
+                        .grand-total { background-color: #2c3e50; color: white; font-weight: bold; font-size: 10pt; }
+                        .amount { text-align: right; }
+                        .indent { padding-left: 20px !important; }
+                    </style>
+
+                    <div class="report-header">
+                        <div class="report-title">
+                            <t t-esc="wizard.company_id.name"/>
+                        </div>
+                        <div class="report-subtitle">LAPORAN POSISI KEUANGAN</div>
+                        <div class="report-subtitle">
+                            Per <t t-esc="wizard.date_to.strftime('%d %B %Y')"/>
+                        </div>
+                        <small>(Disajikan dalam Rupiah, kecuali dinyatakan lain — PSAK 1)</small>
+                    </div>
+
+                    <table class="psak-table">
+                        <thead>
+                            <tr>
+                                <th style="width:60%">Keterangan</th>
+                                <th style="width:40%; text-align:right">Jumlah (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <!-- ======= ASET ======= -->
+                            <tr class="section-header">
+                                <td colspan="2">ASET</td>
+                            </tr>
+                            <tr class="subsection-header">
+                                <td>Aset Lancar</td>
+                                <td></td>
+                            </tr>
+                            <t t-foreach="data['aset_lancar']" t-as="line">
+                                <tr>
+                                    <td class="indent">
+                                        <t t-esc="line['code']"/> - <t t-esc="line['name']"/>
+                                    </td>
+                                    <td class="amount">
+                                        <t t-esc="'{:,.0f}'.format(line['balance'])"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr class="total-row">
+                                <td>Jumlah Aset Lancar</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['total_aset_lancar'])"/>
+                                </td>
+                            </tr>
+
+                            <tr class="subsection-header">
+                                <td>Aset Tidak Lancar</td>
+                                <td></td>
+                            </tr>
+                            <t t-foreach="data['aset_tidak_lancar']" t-as="line">
+                                <tr>
+                                    <td class="indent">
+                                        <t t-esc="line['code']"/> - <t t-esc="line['name']"/>
+                                    </td>
+                                    <td class="amount">
+                                        <t t-esc="'{:,.0f}'.format(line['balance'])"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr class="total-row">
+                                <td>Jumlah Aset Tidak Lancar</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['total_aset_tidak_lancar'])"/>
+                                </td>
+                            </tr>
+                            <tr class="grand-total">
+                                <td>JUMLAH ASET</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['total_aset'])"/>
+                                </td>
+                            </tr>
+
+                            <tr><td colspan="2" style="padding:8px;"></td></tr>
+
+                            <!-- ======= LIABILITAS ======= -->
+                            <tr class="section-header">
+                                <td colspan="2">LIABILITAS DAN EKUITAS</td>
+                            </tr>
+                            <tr class="subsection-header">
+                                <td>Liabilitas Jangka Pendek</td>
+                                <td></td>
+                            </tr>
+                            <t t-foreach="data['liab_jangka_pendek']" t-as="line">
+                                <tr>
+                                    <td class="indent">
+                                        <t t-esc="line['code']"/> - <t t-esc="line['name']"/>
+                                    </td>
+                                    <td class="amount">
+                                        <t t-esc="'{:,.0f}'.format(line['balance'])"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr class="total-row">
+                                <td>Jumlah Liabilitas Jangka Pendek</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['total_liab_jangka_pendek'])"/>
+                                </td>
+                            </tr>
+
+                            <tr class="subsection-header">
+                                <td>Liabilitas Jangka Panjang</td>
+                                <td></td>
+                            </tr>
+                            <t t-foreach="data['liab_jangka_panjang']" t-as="line">
+                                <tr>
+                                    <td class="indent">
+                                        <t t-esc="line['code']"/> - <t t-esc="line['name']"/>
+                                    </td>
+                                    <td class="amount">
+                                        <t t-esc="'{:,.0f}'.format(line['balance'])"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr class="total-row">
+                                <td>Jumlah Liabilitas Jangka Panjang</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['total_liab_jangka_panjang'])"/>
+                                </td>
+                            </tr>
+                            <tr class="total-row">
+                                <td><b>Jumlah Liabilitas</b></td>
+                                <td class="amount">
+                                    <b><t t-esc="'{:,.0f}'.format(data['total_liabilitas'])"/></b>
+                                </td>
+                            </tr>
+
+                            <!-- ======= EKUITAS ======= -->
+                            <tr class="subsection-header">
+                                <td>Ekuitas</td>
+                                <td></td>
+                            </tr>
+                            <t t-foreach="data['ekuitas']" t-as="line">
+                                <tr>
+                                    <td class="indent">
+                                        <t t-esc="line['code']"/> - <t t-esc="line['name']"/>
+                                    </td>
+                                    <td class="amount">
+                                        <t t-esc="'{:,.0f}'.format(line['balance'])"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr class="total-row">
+                                <td>Jumlah Ekuitas</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['total_ekuitas'])"/>
+                                </td>
+                            </tr>
+
+                            <tr class="grand-total">
+                                <td>JUMLAH LIABILITAS DAN EKUITAS</td>
+                                <td class="amount">
+                                    <t t-esc="'{:,.0f}'.format(data['total_liabilitas'] + data['total_ekuitas'])"/>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top:20px; font-size:8pt; color:#7f8c8d;">
+                        Dicetak pada: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                        | Sesuai PSAK 1: Penyajian Laporan Keuangan
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

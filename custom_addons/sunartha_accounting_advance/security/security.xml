@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Kategori modul sendiri agar tidak tabrakan dengan grup Invoicing -->
+        <record id="module_category_accounting_advance" model="ir.module.category">
+            <field name="name">Accounting Advance</field>
+            <field name="description">Sunartha Accounting Advance — Journal Transactions</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <record id="group_accounting_advance_user" model="res.groups">
+            <field name="name">Pengguna</field>
+            <field name="category_id" ref="sunartha_accounting_advance.module_category_accounting_advance"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_accounting_advance_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="sunartha_accounting_advance.module_category_accounting_advance"/>
+            <field name="implied_ids" eval="[(4, ref('sunartha_accounting_advance.group_accounting_advance_user'))]"/>
+        </record>
+
+        <!-- Access untuk TransientModel (pakai search= karena ir.model.data belum ada saat upgrade) -->
+        <record id="access_report_statement_user" model="ir.model.access">
+            <field name="name">access.report.statement.user</field>
+            <field name="model_id" search="[('model', '=', 'sunartha.report.statement')]"/>
+            <field name="group_id" ref="sunartha_accounting_advance.group_accounting_advance_user"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="access_report_statement_line_user" model="ir.model.access">
+            <field name="name">access.report.statement.line.user</field>
+            <field name="model_id" search="[('model', '=', 'sunartha.report.statement.line')]"/>
+            <field name="group_id" ref="sunartha_accounting_advance.group_accounting_advance_user"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== FORM VIEW: account.move (extend) ===== -->
+    <record id="view_move_form_inherit_approval" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.sunartha.approval</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Tombol approval di header — sebelum tombol Post -->
+            <xpath expr="//header/button[@name='action_post']" position="before">
+                <button name="action_submit_approval"
+                        string="Ajukan Persetujuan"
+                        type="object"
+                        class="btn-warning"
+                        invisible="state != 'draft' or not x_requires_approval or x_approval_state not in ('not_required', 'rejected')"/>
+
+                <button name="action_approve"
+                        string="Setujui"
+                        type="object"
+                        class="btn-success"
+                        groups="sunartha_account_base.group_account_approver"
+                        invisible="x_approval_state != 'waiting'"/>
+
+                <button name="action_reject"
+                        string="Tolak"
+                        type="object"
+                        class="btn-danger"
+                        groups="sunartha_account_base.group_account_approver"
+                        invisible="x_approval_state != 'waiting'"/>
+            </xpath>
+
+            <!-- Status bar approval di samping status bar utama -->
+            <xpath expr="//header/field[@name='state']" position="after">
+                <field name="x_approval_state"
+                       widget="statusbar"
+                       statusbar_visible="waiting,approved"
+                       invisible="x_approval_state == 'not_required'"/>
+            </xpath>
+
+            <!-- Tab Approval di notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Approval" name="page_approval"
+                      invisible="x_approval_state == 'not_required' and not x_requires_approval">
+                    <group>
+                        <group string="Status Persetujuan">
+                            <field name="x_approval_state" readonly="1"/>
+                            <field name="x_requires_approval" invisible="1"/>
+                            <field name="x_approver_id" readonly="1"/>
+                            <field name="x_approval_date" readonly="1"/>
+                        </group>
+                        <group string="Catatan" invisible="not x_approval_notes">
+                            <field name="x_approval_notes" nolabel="1" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="x_approval_request_ids" readonly="1">
+                        <list string="Riwayat Approval"
+                              decoration-success="state == 'approved'"
+                              decoration-danger="state == 'rejected'"
+                              decoration-warning="state == 'pending'">
+                            <field name="name"/>
+                            <field name="requester_id"/>
+                            <field name="date_requested"/>
+                            <field name="approver_id"/>
+                            <field name="date_responded"/>
+                            <field name="state"/>
+                            <field name="notes"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ===== LIST VIEW: account.move (extend) ===== -->
+    <record id="view_move_list_inherit_approval" model="ir.ui.view">
+        <field name="name">account.move.list.inherit.sunartha.approval</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="x_approval_state"
+                       optional="show"
+                       decoration-warning="x_approval_state == 'waiting'"
+                       decoration-success="x_approval_state == 'approved'"
+                       decoration-danger="x_approval_state == 'rejected'"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

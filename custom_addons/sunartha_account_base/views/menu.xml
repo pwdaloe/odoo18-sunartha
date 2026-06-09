@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== MENU SUNARTHA (standalone, tidak bergantung Enterprise) ===== -->
+    <menuitem id="menu_sunartha_root"
+              name="Sunartha"
+              web_icon="sunartha_account_base,static/description/icon.png"
+              sequence="50"/>
+
+    <menuitem id="menu_accounting_sunartha"
+              name="Akuntansi"
+              parent="menu_sunartha_root"
+              sequence="10"/>
+
+    <menuitem id="menu_approval_request"
+              name="Approval Jurnal"
+              parent="menu_accounting_sunartha"
+              action="action_account_approval_request"
+              sequence="10"
+              groups="sunartha_account_base.group_account_approver"/>
+
+    <!-- ===== CORETAX EXPORT ===== -->
+    <record id="action_coretax_export" model="ir.actions.act_window">
+        <field name="name">Ekspor CoreTax DJP</field>
+        <field name="res_model">sunartha.coretax.export</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_coretax_export"
+              name="Ekspor CoreTax DJP"
+              parent="menu_accounting_sunartha"
+              action="action_coretax_export"
+              sequence="20"
+              groups="sunartha_account_base.group_account_manager"/>
+
+    <!-- ===== LAPORAN PSAK ===== -->
+    <record id="action_report_psak_wizard" model="ir.actions.act_window">
+        <field name="name">Laporan Keuangan PSAK</field>
+        <field name="res_model">sunartha.report.psak</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_report_psak"
+              name="Laporan Keuangan PSAK"
+              parent="menu_accounting_sunartha"
+              action="action_report_psak_wizard"
+              sequence="30"/>
+
+    <!-- ===== VIEW CORETAX EXPORT ===== -->
+    <record id="view_coretax_export_list" model="ir.ui.view">
+        <field name="name">sunartha.coretax.export.list</field>
+        <field name="model">sunartha.coretax.export</field>
+        <field name="arch" type="xml">
+            <list string="Ekspor CoreTax" decoration-muted="state == 'exported'">
+                <field name="name"/>
+                <field name="export_type"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="line_count"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state == 'exported'"/>
+                <field name="date_export"/>
+                <field name="exported_by"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_coretax_export_form" model="ir.ui.view">
+        <field name="name">sunartha.coretax.export.form</field>
+        <field name="model">sunartha.coretax.export</field>
+        <field name="arch" type="xml">
+            <form string="Ekspor CoreTax DJP">
+                <header>
+                    <button name="action_load_invoices"
+                            string="Muat Faktur"
+                            type="object"
+                            class="btn-secondary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_export_xml"
+                            string="Generate XML CoreTax"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Parameter Ekspor">
+                            <field name="export_type"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Hasil Ekspor">
+                            <field name="line_count" readonly="1"/>
+                            <field name="xml_filename" readonly="1"/>
+                            <field name="date_export" readonly="1"/>
+                            <field name="exported_by" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="move_ids" widget="many2many_tags"
+                           readonly="state == 'exported'"/>
+                    <group string="Catatan">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== VIEW LAPORAN PSAK WIZARD ===== -->
+    <record id="view_report_psak_wizard_form" model="ir.ui.view">
+        <field name="name">sunartha.report.psak.wizard.form</field>
+        <field name="model">sunartha.report.psak</field>
+        <field name="arch" type="xml">
+            <form string="Laporan Keuangan PSAK">
+                <sheet>
+                    <group>
+                        <field name="report_type"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_print_report" string="Cetak Laporan"
+                            type="object" class="btn-primary"/>
+                    <button string="Tutup" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
