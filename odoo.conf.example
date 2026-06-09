@@ -1,0 +1,29 @@
+[options]
+; Odoo 18 Community Edition - Sunartha
+; Salin file ini menjadi odoo.conf dan sesuaikan konfigurasi
+
+; --- Database ---
+db_host = localhost
+db_port = 5432
+db_user = odoo
+db_password = YOUR_DB_PASSWORD
+db_name = False
+
+; --- Paths ---
+addons_path = /path/to/odoo18-sunartha/odoo/addons,/path/to/odoo18-sunartha/custom_addons
+data_dir = /path/to/odoo18-sunartha/.local
+
+; --- Server ---
+xmlrpc_port = 8069
+longpolling_port = 8072
+http_enable = True
+
+; --- Log ---
+logfile = /path/to/odoo18-sunartha/logs/odoo.log
+log_level = info
+
+; --- Worker (0 = threaded mode, cocok untuk development) ---
+workers = 0
+
+; --- Admin ---
+admin_passwd = YOUR_MASTER_PASSWORD
