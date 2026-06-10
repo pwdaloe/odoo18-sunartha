@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== FORM VIEW ===== -->
+    <record id="view_accounting_period_form" model="ir.ui.view">
+        <field name="name">sunartha.accounting.period.form</field>
+        <field name="model">sunartha.accounting.period</field>
+        <field name="arch" type="xml">
+            <form string="Accounting Period">
+                <header>
+                    <button name="action_lock" string="Lock Period" type="object"
+                            class="btn-danger"
+                            groups="sunartha_accounting_advance.group_accounting_advance_manager"
+                            invisible="state == 'locked'"/>
+                    <button name="action_unlock" string="Unlock Period" type="object"
+                            class="btn-warning"
+                            groups="sunartha_accounting_advance.group_accounting_advance_manager"
+                            invisible="state == 'open'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="open,locked"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Periode">
+                            <field name="name"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Informasi Kunci">
+                            <field name="locked_by" readonly="1"/>
+                            <field name="locked_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Catatan">
+                        <field name="note" nolabel="1" placeholder="Catatan penutupan periode..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== LIST VIEW ===== -->
+    <record id="view_accounting_period_list" model="ir.ui.view">
+        <field name="name">sunartha.accounting.period.list</field>
+        <field name="model">sunartha.accounting.period</field>
+        <field name="arch" type="xml">
+            <list string="Accounting Periods"
+                  decoration-success="state == 'open'"
+                  decoration-danger="state == 'locked'">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'open'"
+                       decoration-danger="state == 'locked'"/>
+                <field name="locked_by" optional="show"/>
+                <field name="locked_at" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===== ACTION ===== -->
+    <record id="action_accounting_period" model="ir.actions.act_window">
+        <field name="name">Accounting Periods</field>
+        <field name="res_model">sunartha.accounting.period</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Buat periode akuntansi pertama
+            </p>
+            <p>Kunci periode setelah closing untuk mencegah entry mundur.</p>
+        </field>
+    </record>
+
+</odoo>

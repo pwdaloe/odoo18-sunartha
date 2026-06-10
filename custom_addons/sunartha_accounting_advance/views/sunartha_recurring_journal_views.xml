@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===== FORM VIEW ===== -->
+    <record id="view_recurring_journal_form" model="ir.ui.view">
+        <field name="name">sunartha.recurring.journal.form</field>
+        <field name="model">sunartha.recurring.journal</field>
+        <field name="arch" type="xml">
+            <form string="Recurring Journal">
+                <header>
+                    <button name="action_generate_now" string="Generate Now" type="object"
+                            class="btn-primary"
+                            invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="active,paused,ended"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_generated" type="object"
+                                class="oe_stat_button" icon="fa-list">
+                            <field name="generated_count" widget="statinfo"
+                                   string="Generated"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Nama template..."/></h1>
+                    </div>
+                    <group>
+                        <group string="Jadwal">
+                            <field name="frequency"/>
+                            <field name="day_of_month"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="next_run_date"/>
+                        </group>
+                        <group string="Referensi">
+                            <field name="module"/>
+                            <field name="branch_id"/>
+                            <field name="ledger_id"/>
+                            <field name="currency_id" options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Description Template">
+                        <field name="description" nolabel="1"
+                               placeholder="Keterangan yang akan dipakai di setiap generated transaction..."/>
+                    </group>
+                    <notebook>
+                        <page string="Journal Lines" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="account_id"
+                                           options="{'no_create': True}"/>
+                                    <field name="description"/>
+                                    <field name="branch_id" optional="hide"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="debit_amount" sum="Total Debit"/>
+                                    <field name="credit_amount" sum="Total Credit"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="History" name="history">
+                            <field name="generated_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="transaction_date"/>
+                                    <field name="description"/>
+                                    <field name="debit_total"/>
+                                    <field name="state" widget="badge"
+                                           decoration-muted="state == 'draft'"
+                                           decoration-info="state == 'posted'"
+                                           decoration-success="state == 'approved'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===== LIST VIEW ===== -->
+    <record id="view_recurring_journal_list" model="ir.ui.view">
+        <field name="name">sunartha.recurring.journal.list</field>
+        <field name="model">sunartha.recurring.journal</field>
+        <field name="arch" type="xml">
+            <list string="Recurring Journals"
+                  decoration-muted="state == 'ended'"
+                  decoration-warning="state == 'paused'">
+                <field name="name"/>
+                <field name="frequency"/>
+                <field name="next_run_date"/>
+                <field name="date_end" optional="show"/>
+                <field name="module" widget="badge"
+                       decoration-info="module == 'gl'"
+                       decoration-warning="module == 'ar'"
+                       decoration-success="module == 'ap'"/>
+                <field name="branch_id" optional="show"/>
+                <field name="generated_count" string="Generated"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'active'"
+                       decoration-warning="state == 'paused'"
+                       decoration-muted="state == 'ended'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===== ACTION ===== -->
+    <record id="action_recurring_journal" model="ir.actions.act_window">
+        <field name="name">Recurring Journals</field>
+        <field name="res_model">sunartha.recurring.journal</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Buat template jurnal berulang pertama
+            </p>
+            <p>Gunakan untuk biaya sewa, akrual, dan entry bulanan otomatis.</p>
+        </field>
+    </record>
+
+</odoo>

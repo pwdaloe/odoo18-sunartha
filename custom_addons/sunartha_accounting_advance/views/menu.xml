@@ -16,13 +16,13 @@
 
     <!-- ===== JOURNAL TRANSACTIONS ===== -->
     <menuitem id="menu_accounting_advance_trx"
-              name="Journal Transactions"
+              name="Journal"
               parent="menu_accounting_advance_root"
               sequence="20"
               groups="sunartha_accounting_advance.group_accounting_advance_user"/>
 
     <menuitem id="menu_accounting_advance_trx_all"
-              name="Semua Transaksi"
+              name="Journal Transactions"
               parent="menu_accounting_advance_trx"
               action="action_sunartha_journal_transaction"
               sequence="10"
@@ -33,6 +33,13 @@
               parent="menu_accounting_advance_trx"
               action="action_sunartha_journal_transaction_pending"
               sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <menuitem id="menu_accounting_advance_recurring"
+              name="Recurring Journals"
+              parent="menu_accounting_advance_trx"
+              action="sunartha_accounting_advance.action_recurring_journal"
+              sequence="30"
               groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
 
     <!-- ===== REPORTING ===== -->
@@ -69,6 +76,27 @@
               sequence="30"
               groups="sunartha_accounting_advance.group_accounting_advance_user"/>
 
+    <!-- Aging Reports -->
+    <menuitem id="menu_accounting_advance_aging_reports"
+              name="Aging Reports"
+              parent="menu_accounting_advance_reporting"
+              sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
+    <menuitem id="menu_accounting_advance_ar_aging"
+              name="AR Aging"
+              parent="menu_accounting_advance_aging_reports"
+              action="sunartha_accounting_advance.action_report_ar_aging"
+              sequence="10"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
+    <menuitem id="menu_accounting_advance_ap_aging"
+              name="AP Aging"
+              parent="menu_accounting_advance_aging_reports"
+              action="sunartha_accounting_advance.action_report_ap_aging"
+              sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_user"/>
+
     <!-- ===== CONFIGURATION ===== -->
     <menuitem id="menu_accounting_advance_config"
               name="Configuration"
@@ -95,6 +123,14 @@
               parent="menu_accounting_advance_masterdata"
               action="action_sunartha_ledger"
               sequence="20"
+              groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
+
+    <!-- Sub-grup: Periods -->
+    <menuitem id="menu_accounting_advance_periods"
+              name="Accounting Periods"
+              parent="menu_accounting_advance_config"
+              action="sunartha_accounting_advance.action_accounting_period"
+              sequence="5"
               groups="sunartha_accounting_advance.group_accounting_advance_manager"/>
 
     <!-- Sub-grup: Accounting -->

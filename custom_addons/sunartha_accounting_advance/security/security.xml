@@ -21,7 +21,8 @@
             <field name="implied_ids" eval="[(4, ref('sunartha_accounting_advance.group_accounting_advance_user'))]"/>
         </record>
 
-        <!-- Access untuk TransientModel (pakai search= karena ir.model.data belum ada saat upgrade) -->
+        <!-- Access TransientModel — pakai search= karena ir.model.data belum ada saat upgrade pertama -->
+        <!-- Financial Statement Report -->
         <record id="access_report_statement_user" model="ir.model.access">
             <field name="name">access.report.statement.user</field>
             <field name="model_id" search="[('model', '=', 'sunartha.report.statement')]"/>
@@ -35,6 +36,27 @@
         <record id="access_report_statement_line_user" model="ir.model.access">
             <field name="name">access.report.statement.line.user</field>
             <field name="model_id" search="[('model', '=', 'sunartha.report.statement.line')]"/>
+            <field name="group_id" ref="sunartha_accounting_advance.group_accounting_advance_user"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- AR/AP Aging Report -->
+        <record id="access_report_aging_user" model="ir.model.access">
+            <field name="name">access.report.aging.user</field>
+            <field name="model_id" search="[('model', '=', 'sunartha.report.aging')]"/>
+            <field name="group_id" ref="sunartha_accounting_advance.group_accounting_advance_user"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <record id="access_report_aging_line_user" model="ir.model.access">
+            <field name="name">access.report.aging.line.user</field>
+            <field name="model_id" search="[('model', '=', 'sunartha.report.aging.line')]"/>
             <field name="group_id" ref="sunartha_accounting_advance.group_accounting_advance_user"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

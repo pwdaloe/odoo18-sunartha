@@ -27,6 +27,17 @@
                             <field name="company_id" groups="base.group_multi_company"/>
                         </group>
                     </group>
+                    <group>
+                        <group string="Perbandingan">
+                            <field name="enable_comparison"/>
+                            <field name="comparison_type"
+                                   invisible="not enable_comparison"/>
+                            <field name="comparison_date_from"
+                                   invisible="not enable_comparison or comparison_type != 'custom'"/>
+                            <field name="comparison_date_to"
+                                   invisible="not enable_comparison or comparison_type != 'custom'"/>
+                        </group>
+                    </group>
                     <field name="report_type" invisible="1"/>
                     <separator string="Report Lines"/>
                     <field name="line_ids" readonly="1" nolabel="1">
@@ -39,6 +50,9 @@
                             <field name="debit" string="Debit"/>
                             <field name="credit" string="Credit"/>
                             <field name="balance" string="Balance"/>
+                            <field name="balance_prev" string="Prior Period" optional="show"/>
+                            <field name="variance" string="Variance" optional="show"/>
+                            <field name="variance_pct" string="Var%" optional="show"/>
                             <field name="is_section" column_invisible="1"/>
                             <field name="is_total" column_invisible="1"/>
                         </list>

@@ -65,6 +65,10 @@ class SunarthaJournalTransaction(models.Model):
         'sunartha.journal.transaction', string='Reversal Entry', readonly=True, copy=False)
     reversed_entry_id = fields.Many2one(
         'sunartha.journal.transaction', string='Original Entry', readonly=True, copy=False)
+    partner_id = fields.Many2one('res.partner', string='Partner', tracking=True)
+    due_date = fields.Date(string='Due Date', tracking=True)
+    recurring_id = fields.Many2one(
+        'sunartha.recurring.journal', string='From Recurring', readonly=True, copy=False)
 
     @api.depends('transaction_date')
     def _compute_post_period(self):
@@ -149,6 +153,13 @@ class SunarthaJournalTransaction(models.Model):
         for rec in self:
             if rec.state != 'approved':
                 raise UserError(_('Hanya transaksi Disetujui yang bisa diposting.'))
+            locked = self.env['sunartha.accounting.period'].get_locked_period_for_date(
+                rec.transaction_date, rec.company_id.id)
+            if locked:
+                raise UserError(_(
+                    'Tidak dapat posting ke periode yang terkunci: %s\n'
+                    'Hubungi Manager untuk membuka periode terlebih dahulu.'
+                ) % locked.name)
             if not rec.is_balanced:
                 raise UserError(_(
                     'Debit Total (%(debit)s) tidak sama dengan Credit Total (%(credit)s).\n'

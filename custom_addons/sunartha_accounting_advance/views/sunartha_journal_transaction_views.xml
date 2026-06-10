@@ -70,6 +70,11 @@
                                    readonly="state != 'draft'"/>
                         </group>
                         <group string="Referensi">
+                            <field name="partner_id"
+                                   readonly="state != 'draft'"/>
+                            <field name="due_date"
+                                   readonly="state != 'draft'"
+                                   invisible="module != 'ar' and module != 'ap'"/>
                             <field name="branch_id"
                                    readonly="state != 'draft'"/>
                             <field name="ledger_id"
@@ -84,6 +89,8 @@
                             <field name="company_id"
                                    groups="base.group_multi_company" readonly="1"/>
                             <field name="user_id" readonly="1"/>
+                            <field name="recurring_id" readonly="1"
+                                   invisible="not recurring_id"/>
                         </group>
                     </group>
 
@@ -178,6 +185,8 @@
                        decoration-success="module == 'ap'"
                        decoration-primary="module == 'in'"/>
                 <field name="transaction_date"/>
+                <field name="partner_id" optional="show"/>
+                <field name="due_date" optional="hide"/>
                 <field name="post_period" optional="show"/>
                 <field name="branch_id" optional="show"/>
                 <field name="ledger_id" optional="hide"/>
